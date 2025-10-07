@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+<body>
+    
+    <!-- Login Form -->
+    <div class="login-container" id="loginForm">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Sign In</h2>
+                <p>Enter your credentials to access your account</p>
+            </div>
+            
+            <form class="login-form" id="loginFormElement" novalidate>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" required>
+                        <label for="username">Username</label>
+                    </div>
+                    <span class="error-message" id="usernameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" id="password" name="password" required>
+                        <label for="password">Password</label>
+                        <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                            <span class="eye-icon"></span>
+                        </button>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-wrapper">
+                        <input type="checkbox" id="remember" name="remember">
+                        <span class="checkbox-label">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span class="btn-text">Sign In</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
+
+            <div class="signup-link">
+                <p>Don't have an account? <a href="#" onclick="showRegister()">Create one</a></p>
+            </div>
+
+            <div class="success-message" id="loginSuccess">
+                <div class="success-icon">✓</div>
+                <h3>Login Successful!</h3>
+                <p>Redirecting to your dashboard...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Form -->
+    <div class="login-container hidden" id="registerForm">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Create Account</h2>
+                <p>Join us today and get started</p>
+            </div>
+            
+            <form class="login-form" id="registerFormElement" novalidate>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="email" id="regEmail" name="email" required autocomplete="email">
+                        <label for="regEmail">Email Address</label>
+                    </div>
+                    <span class="error-message" id="regEmailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="regUser" name="username" required>
+                        <label for="regUser">Username</label>
+                    </div>
+                    <span class="error-message" id="regUserError"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" id="regPass" name="password" required autocomplete="new-password">
+                        <label for="regPass">Password</label>
+                        <button type="button" class="password-toggle" id="regPasswordToggle" aria-label="Toggle password visibility">
+                            <span class="eye-icon"></span>
+                        </button>
+                    </div>
+                    <span class="error-message" id="regPassError"></span>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
+
+            <div class="signup-link">
+                <p>Already have an account? <a href="#" onclick="showLogin()">Sign in</a></p>
+            </div>
+
+            <div class="success-message" id="registerSuccess">
+                <div class="success-icon">✓</div>
+                <h3>Account Created!</h3>
+                <p>Please login with your new account</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- OTP Modal -->
+    <div class="otp-modal-overlay hidden" id="otpModalOverlay">
+        <div class="otp-modal">
+            <div class="otp-modal-header">
+                <h3>ยืนยัน OTP</h3>
+                <button type="button" class="close-otp-modal" id="closeOtpModal">&times;</button>
+            </div>
+            
+            <div class="otp-modal-body">
+                <p class="otp-instruction">
+                    เราได้ส่งรหัส OTP 6 หลักไปยัง<br>
+                    <span id="otpEmail" class="email-highlight"></span>
+                </p>
+                
+                <form id="otpForm" novalidate>
+                    <div class="otp-input-group">
+                        <input type="text" id="otp1" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                        <input type="text" id="otp2" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                        <input type="text" id="otp3" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                        <input type="text" id="otp4" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                        <input type="text" id="otp5" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                        <input type="text" id="otp6" maxlength="1" class="otp-input" autocomplete="off" pattern="[0-9]">
+                    </div>
+                    
+                    <span class="error-message" id="otpError"></span>
+                    
+                    <div class="otp-timer">
+                        <p>รหัส OTP จะหมดอายุใน <span id="otpTimer">10:00</span></p>
+                    </div>
+                    
+                    <button type="submit" class="otp-verify-btn">
+                        <span class="btn-text">ยืนยัน OTP</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                    
+                    <button type="button" class="resend-otp-btn" id="resendOtpBtn">
+                        ส่ง OTP ใหม่
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
